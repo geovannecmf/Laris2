@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Paleta "Catálogo de Tintas Antitédio" — cada módulo é uma amostra de cor.
+  Garoa (fundo), Grafite (tinta), Ipê (destaque), Araucária, Mar de Tasman,
+  Tomate (cinema), Lavanda (streaming), Kiwi (arcade).
+*/
+:root {
+  --bg: 227 233 234;
+  --surface: 248 250 250;
+  --sunk: 213 222 224;
+  --ink: 28 37 45;
+  --muted: 82 96 106;
+  --line: 28 37 45;
+  --ipe: 242 183 5;
+  --arauc: 47 122 85;
+  --mar: 14 124 134;
+  --tomate: 214 64 52;
+  --lavanda: 108 91 212;
+  --kiwi: 132 176 38;
+  --ok: 33 128 77;
+  --warn: 196 128 0;
+  --bad: 196 52 44;
+  color-scheme: light;
+}
+.dark {
+  --bg: 21 28 36;
+  --surface: 31 40 50;
+  --sunk: 15 21 27;
+  --ink: 232 238 240;
+  --muted: 160 175 184;
+  --line: 120 138 150;
+  --ipe: 247 196 48;
+  --arauc: 92 176 132;
+  --mar: 64 182 192;
+  --tomate: 240 110 96;
+  --lavanda: 160 146 245;
+  --kiwi: 170 210 80;
+  --ok: 92 196 132;
+  --warn: 240 184 64;
+  --bad: 246 112 100;
+  color-scheme: dark;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  @apply bg-bg text-ink font-body antialiased;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3, h4 { @apply font-display; letter-spacing: -0.02em; }
+
+:focus-visible { outline: 3px solid rgb(var(--mar)); outline-offset: 2px; border-radius: 6px; }
+
+/* Shadow sólido estilo adesivo/amostra; no escuro vira borda clara. */
+.dark .shadow-chip { box-shadow: 4px 4px 0 0 rgb(0 0 0 / 0.55); }
+.dark .shadow-chipsm { box-shadow: 2px 2px 0 0 rgb(0 0 0 / 0.55); }
+
+@layer components {
+  .chip {
+    @apply rounded-2xl border-2 border-ink/90 bg-surface shadow-chip dark:border-line/60;
+  }
+  .btn {
+    @apply inline-flex min-h-[44px] select-none items-center justify-center gap-2 rounded-xl border-2 border-ink px-4 py-2 font-display text-[15px] font-semibold transition-[transform,box-shadow,background-color] duration-100 dark:border-line/70;
+  }
+  .btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; }
+  .btn:disabled { @apply cursor-not-allowed opacity-50; }
+  .btn-primary { @apply btn bg-ipe text-[#1C252D] shadow-chipsm; }
+  .btn-dark { @apply btn bg-ink text-bg shadow-chipsm; }
+  .btn-ghost { @apply btn border-transparent bg-transparent hover:bg-sunk dark:border-transparent; }
+  .btn-outline { @apply btn bg-surface shadow-chipsm; }
+  .field {
+    @apply min-h-[44px] w-full rounded-xl border-2 border-ink/70 bg-surface px-3 py-2 text-base text-ink placeholder:text-muted/80 dark:border-line/60;
+  }
+  .label { @apply mb-1 block text-sm font-bold text-ink; }
+  .pill {
+    @apply inline-flex min-h-[40px] cursor-pointer select-none items-center gap-1.5 rounded-full border-2 border-ink/70 bg-surface px-3.5 py-1.5 text-sm font-bold transition-colors dark:border-line/60;
+  }
+  .pill[aria-pressed='true'], .pill[aria-checked='true'] { @apply border-ink bg-ink text-bg dark:bg-ink dark:text-bg; }
+  .tag { @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-bold; }
+  .section-title { @apply font-display text-2xl font-bold sm:text-3xl; }
+}
+
+/* Animações (respeitam prefers-reduced-motion) */
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drip { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
+@keyframes wobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+@keyframes confetti-fall { to { transform: translate3d(var(--dx), 110vh, 0) rotate(720deg); } }
+.anim-pop { animation: pop-in 0.28s cubic-bezier(.2,.8,.2,1) both; }
+.anim-sheet { animation: sheet-up 0.32s cubic-bezier(.2,.8,.2,1) both; }
+.anim-fade { animation: fade 0.2s ease both; }
+.anim-wobble { animation: wobble 0.5s ease; }
+.drip { transform-origin: top; animation: drip 0.9s cubic-bezier(.3,.7,.2,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+.pb-safe { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+.touch-none-strict { touch-action: none; }

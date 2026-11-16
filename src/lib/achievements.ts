@@ -1,0 +1,23 @@
+export interface Achievement { id: string; name: string; hint: string; secret?: boolean }
+export const ACHIEVEMENTS: Achievement[] = [
+  { id: 'bored', name: 'Confissão pública', hint: 'Apertar o botão "Estou entediada".' },
+  { id: 'paint', name: 'Meteorologista de rolo', hint: 'Avaliar um dia para pintar.' },
+  { id: 'paint-ok', name: 'Sinal verde', hint: 'Encontrar um dia favorável para pintar.' },
+  { id: 'nz-offer', name: 'Caçadora de tarifas', hint: 'Registrar uma oferta real de passagem.' },
+  { id: 'nz-goal', name: 'Meta no horizonte', hint: 'Definir uma meta de preço para a Nova Zelândia.' },
+  { id: 'fav', name: 'Colecionadora', hint: 'Favoritar um lugar ou título.' },
+  { id: 'match', name: 'Deu match', hint: 'Encontrar um filme em comum na votação.' },
+  { id: 'route', name: 'Roteirista', hint: 'Gerar um roteiro pela cidade.' },
+  { id: 'snake20', name: 'Cobra criada', hint: 'Fazer 20 pontos no Snake.' },
+  { id: 'ttt-cpu', name: 'Vitória contra a máquina', hint: 'Não perder para o computador no difícil... ou ganhar dele.' },
+  { id: 'quiz8', name: 'Sabe-tudo', hint: 'Acertar 8 ou mais em uma rodada do quiz.' },
+  { id: 'wheel', name: 'Deixa a roleta decidir', hint: 'Girar a roleta.' },
+  { id: 'memory', name: 'Memória de elefante', hint: 'Terminar o jogo da memória.' },
+  { id: 'reflex', name: 'Reflexo de goleira', hint: 'Reagir em menos de 300 ms.' },
+  { id: 'challenge', name: 'Missão cumprida', hint: 'Concluir o desafio do dia.' },
+  { id: 'recipe', name: 'Chef de quinta-feira', hint: 'Sortear uma receita.' },
+  { id: 'nodecide', name: 'Terceirizei a decisão', hint: 'Usar o modo "Não quero decidir".' },
+  { id: 'night', name: 'Coruja', hint: 'Abrir o app entre meia-noite e 5h.', secret: true },
+  { id: 'logo', name: 'Cutucadora', hint: 'Cutucar o logo várias vezes.', secret: true },
+  { id: 'konami', name: 'Kia ora!', hint: 'Um código antigo de videogame.', secret: true },
+];

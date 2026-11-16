@@ -1,0 +1,7 @@
+node_modules
+dist
+*.zip
+.wrangler
+.dev.vars
+test-results
+tsconfig.tsbuildinfo
