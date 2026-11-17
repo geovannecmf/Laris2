@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Plane, Search, Plus, Trash2, Star, Target, ExternalLink, Info, Megaphone } from 'lucide-react';
+import { Search, Plus, Trash2, Star, Target, ExternalLink, Info, Megaphone } from 'lucide-react';
 import { ModuleHeader, SourceBadge, Empty, ExtLink, Seg } from '../components/ui';
 import { useApp } from '../components/AppState';
 import { useStored, uid } from '../lib/storage';
@@ -9,46 +9,40 @@ import { ORIGINS, DESTS, searchLinks, validateOffer, brl, type Origin, type Dest
 interface Query { origins: Origin[]; dests: Dest[]; depart: string; ret: string; oneWay: boolean; adults: number; budget: number | null }
 
 function RouteMap({ origins, dests }: { origins: Origin[]; dests: Dest[] }) {
-  // Projeção equiretangular simplificada: x = (lon+180)/360, y = (90-lat)/180
-  const W = 600, H = 260;
-  const pt = (lon: number, lat: number) => [((lon + 180) / 360) * W, ((90 - lat) / 180) * H * 1.6 - 70] as const;
+  // Projeção equiretangular centrada no Pacífico (lon -120): NZ à esquerda, Brasil à direita.
+  const W = 600, H = 250;
+  const pt = (lon: number, lat: number) => {
+    const rel = ((lon + 120 + 540) % 360) - 180;
+    return [((rel + 180) / 360) * W * 1.25 - W * 0.12, 24 + (-lat / 55) * (H - 48)] as const;
+  };
   const O: Record<Origin, readonly [number, number]> = { CWB: pt(-49.17, -25.53), GRU: pt(-46.47, -23.43) };
   const D: Record<Dest, readonly [number, number]> = { AKL: pt(174.79, -37.01), WLG: pt(174.8, -41.33), CHC: pt(172.53, -43.49) };
-  // A rota cruza o Pacífico: desenhamos para a esquerda, saindo da borda e voltando pela direita
+  const DY: Record<Dest, number> = { AKL: -8, WLG: 4, CHC: 16 };
   const arcs = origins.flatMap((o) => dests.map((d) => ({ o, d })));
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Mapa estilizado: ${origins.join(', ')} até ${dests.map((d) => DESTS[d].name).join(', ')} atravessando o Pacífico`}>
-      <defs>
-        <pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="currentColor" opacity="0.25" /></pattern>
-      </defs>
-      <rect width={W} height={H} fill="url(#dots)" className="text-white" />
-      {[0.25, 0.5, 0.75].map((y) => <line key={y} x1="0" x2={W} y1={H * y} y2={H * y} stroke="white" strokeOpacity="0.15" strokeDasharray="4 6" />)}
-      <text x="12" y={H - 12} fill="white" opacity="0.6" fontSize="11" fontWeight="700">Oceano Pacífico (rota ilustrativa, não é o trajeto real do voo)</text>
+    <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={`Mapa ilustrativo: de ${origins.join(' e ')} até ${dests.map((d) => DESTS[d].name).join(', ')}, atravessando o Pacífico`}>
+      <defs><pattern id="dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="white" opacity="0.22" /></pattern></defs>
+      <rect width={W} height={H} fill="url(#dots)" />
+      <text x={pt(-60, -10)[0]} y={pt(-60, -10)[1]} fill="white" opacity="0.45" fontSize="12" fontWeight="700" textAnchor="middle">América do Sul</text>
+      <text x={pt(150, -22)[0]} y={pt(150, -22)[1]} fill="white" opacity="0.45" fontSize="12" fontWeight="700" textAnchor="middle">Oceania</text>
+      <text x={W / 2} y={H - 10} fill="white" opacity="0.55" fontSize="11" fontWeight="700" textAnchor="middle">Oceano Pacífico · traçado ilustrativo, não é a rota real do voo</text>
       {arcs.map(({ o, d }, i) => {
         const [x1, y1] = O[o]; const [x2, y2] = D[d];
-        // Para a esquerda até a borda (x=0) e da borda direita até a NZ
-        const midY = Math.max(y1, y2) + 30 + i * 6;
-        const p1 = `M${x1},${y1} Q${x1 / 2},${midY} 0,${(y1 + midY) / 2 + 10}`;
-        const p2 = `M${W},${(y1 + midY) / 2 + 10} Q${(W + x2) / 2},${midY - 10} ${x2},${y2}`;
-        return (
-          <g key={o + d} fill="none" stroke="rgb(var(--ipe))" strokeWidth="2.5" strokeDasharray="2 7" strokeLinecap="round">
-            <path d={p1} /><path d={p2} />
-          </g>
-        );
+        const cy = Math.min(y1, y2) + 80 + i * 8;
+        return <path key={o + d} d={`M${x1},${y1} Q${(x1 + x2) / 2},${cy} ${x2},${y2}`} fill="none" stroke="rgb(var(--ipe))" strokeWidth="2.5" strokeDasharray="2 7" strokeLinecap="round" />;
       })}
       {(Object.keys(O) as Origin[]).map((o) => (
         <g key={o} opacity={origins.includes(o) ? 1 : 0.35}>
           <circle cx={O[o][0]} cy={O[o][1]} r="6" fill="rgb(var(--ipe))" stroke="#1C252D" strokeWidth="2" />
-          <text x={O[o][0] + 9} y={O[o][1] + (o === 'GRU' ? -6 : 14)} fill="white" fontSize="14" fontWeight="800">{o}</text>
+          <text x={O[o][0] + 10} y={O[o][1] + (o === 'GRU' ? -4 : 14)} fill="white" fontSize="14" fontWeight="800">{o}</text>
         </g>
       ))}
       {(Object.keys(D) as Dest[]).map((d) => (
         <g key={d} opacity={dests.includes(d) ? 1 : 0.35}>
-          <circle cx={D[d][0]} cy={D[d][1]} r="6" fill="white" stroke="#1C252D" strokeWidth="2" />
-          <text x={D[d][0] - 10} y={D[d][1] + 4} textAnchor="end" fill="white" fontSize="14" fontWeight="800">{d}</text>
+          <circle cx={D[d][0]} cy={D[d][1]} r="5" fill="white" stroke="#1C252D" strokeWidth="2" />
+          <text x={D[d][0] - 10} y={D[d][1] + DY[d]} textAnchor="end" fill="white" fontSize="13" fontWeight="800">{d}</text>
         </g>
       ))}
-      <g className="motion-safe:animate-pulse"><Plane x={W / 2 - 12} y={22} width={24} height={24} color="white" /></g>
     </svg>
   );
 }

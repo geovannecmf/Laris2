@@ -81,7 +81,7 @@ export default function Home() {
       <section className="grid gap-5 lg:grid-cols-[1.4fr_1fr] lg:items-stretch">
         <div className="flex flex-col justify-between gap-6 pt-2">
           <div>
-            <p className="font-display text-lg font-semibold text-muted">{greeting(sp.hour)} <span className="capitalize">{fmtLongToday(now)}</span>, {fmtClock(now)}.</p>
+            <p className="font-display text-lg font-semibold text-muted">{greeting(sp.hour)} {fmtLongToday(now)}, {fmtClock(now)}.</p>
             <h1 className="mt-3 font-display text-[2.6rem] font-extrabold leading-[0.95] tracking-tight sm:text-6xl xl:text-7xl">
               Você disse que estava entediada. Eu levei a sério.
             </h1>
@@ -161,7 +161,7 @@ export default function Home() {
           {f && paint && (
             <div className="mt-2 space-y-3">
               <p className="font-display text-xl font-bold leading-tight">
-                {paint.externa ? <>Próxima janela externa: <span className="capitalize">{fmtDay(paint.externa.date)}</span>.</> : 'Nenhum dia favorável para pintura externa nos próximos 7 dias.'}
+                {paint.externa ? <>Próxima janela externa: {fmtDay(paint.externa.date)}.</> : 'Nenhum dia favorável para pintura externa nos próximos 7 dias.'}
               </p>
               <p className="text-sm text-muted">{paint.interna ? <>Interna: {fmtDay(paint.interna.date)} passa nos critérios.</> : 'Interna: umidade alta em todos os dias analisados.'} Simulação padrão: acrílica, 2 demãos, 24 h de proteção, início às 9h.</p>
               <Link to={paint.externa ? `/pintar?d=${paint.externa.date}&m=externa` : '/pintar'} className="btn-primary">Ajustar para a minha tinta</Link>

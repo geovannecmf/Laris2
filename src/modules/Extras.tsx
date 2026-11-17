@@ -44,7 +44,7 @@ export default function Extras() {
       <ModuleHeader code="AT-07" name="Lavanda Bônus" color="lavanda" title="Extras" lead="As coisas pequenas que fazem você voltar: desafio do dia, receitas para dois, um sorteador de restaurante, uma lista de planos e as conquistas." />
 
       <section id="desafio" className="chip scroll-mt-20 overflow-hidden">
-        <div className="bg-ipe px-5 py-2 font-display font-bold text-[#1C252D]"><span className="capitalize">{fmtLongToday()}</span></div>
+        <div className="bg-ipe px-5 py-2 font-display font-bold text-[#1C252D]">{fmtLongToday()}</div>
         <div className="p-5">
           <h2 className="font-display text-sm font-bold text-muted">Desafio do dia</h2>
           <p className="mt-1 font-display text-3xl font-extrabold leading-tight">{challenge}</p>
@@ -60,7 +60,7 @@ export default function Extras() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section id="receitas" className="chip scroll-mt-20 p-5">
+        <section id="receitas" className="chip min-w-0 scroll-mt-20 p-5">
           <div className="flex items-center justify-between gap-2"><h2 className="flex items-center gap-2 font-display text-xl font-bold"><ChefHat size={20} aria-hidden />Receita para dois</h2><SourceBadge kind="editorial" /></div>
           <div className="no-scrollbar -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5">{tags.map((t) => <button key={t} className="pill shrink-0 !min-h-[36px] !text-xs" aria-pressed={rTag === t} onClick={() => setRTag(t)}>{t}</button>)}</div>
           <button className="btn-primary mt-3 w-full" onClick={drawRecipe}><Shuffle size={16} />{recipe ? 'Sortear outra' : 'Sortear receita'}</button>
@@ -77,7 +77,7 @@ export default function Extras() {
           ) : <p className="mt-4 text-muted">Dez receitas simples testadas por gerações de pessoas com fome. Escolha um filtro ou só sorteie.</p>}
         </section>
 
-        <section id="restaurante" className="chip scroll-mt-20 p-5">
+        <section id="restaurante" className="chip min-w-0 scroll-mt-20 p-5">
           <div className="flex items-center justify-between gap-2"><h2 className="flex items-center gap-2 font-display text-xl font-bold"><UtensilsCrossed size={20} aria-hidden />Sorteador de onde comer</h2><SourceBadge kind="editorial" /></div>
           <p className="mt-1 text-sm text-muted">Sorteia entre tipos de restaurante e lugares conhecidos de Curitiba. O mapa mostra as opções com avaliações atuais.</p>
           <button className="btn-primary mt-3 w-full" onClick={() => setRest(food[Math.floor(Math.random() * food.length)])}><Shuffle size={16} />Sortear</button>

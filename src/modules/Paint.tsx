@@ -189,7 +189,7 @@ export default function Paint() {
                   </div>
                 </div>
                 <div className="space-y-4 p-5">
-                  <p className="font-display text-lg font-bold capitalize">{fmtDay(cfg.date)}, das {cfg.startHour}h, {ROOMS[cfg.room].label.toLowerCase()}, {cfg.coats} demão(s) de {PAINTS[cfg.paint].label.toLowerCase()}</p>
+                  <p className="font-display text-lg font-bold">{(() => { const d = fmtDay(cfg.date); return d.charAt(0).toUpperCase() + d.slice(1); })()}, a partir das {cfg.startHour}h: {ROOMS[cfg.room].label.toLowerCase()}, {cfg.coats} {cfg.coats > 1 ? 'demãos' : 'demão'} de {PAINTS[cfg.paint].label.split(' (')[0].toLowerCase()}</p>
                   <div className="rounded-xl bg-sunk p-3">
                     <p className="text-sm"><span className="font-bold">Confiança: {shown.confidence.label}.</span> {shown.confidence.detail}</p>
                   </div>

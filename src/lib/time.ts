@@ -48,7 +48,8 @@ export function fmtDateTime(ts: number) {
   return new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(ts));
 }
 export function fmtLongToday(d = new Date()) {
-  return new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(d);
+  const s = new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' }).format(d);
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /** Semente estável por dia (desafio do dia etc.). */

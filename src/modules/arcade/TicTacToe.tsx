@@ -59,8 +59,8 @@ export default function TicTacToe() {
           </button>
         ))}
       </div>
-      <div className="mt-4 flex items-center justify-between">
-        <p className="flex gap-3 text-sm font-bold">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+        <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm font-bold">
           <span className="flex items-center gap-1">{mode === 'cpu' ? <Users size={14} /> : null}{label('X')}: {score.X}</span>
           <span className="flex items-center gap-1">{mode === 'cpu' ? <Cpu size={14} /> : null}{label('O')}: {score.O}</span>
           <span>Velha: {score.empate}</span>
